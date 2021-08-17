@@ -6,14 +6,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
-public class AddStudent extends HttpServlet {
+public class SearchStudent extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         super.doGet(req, resp);
@@ -23,7 +19,6 @@ public class AddStudent extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Connection con =null;
         Statement stmt=null;
-        int result=0;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con= DriverManager.getConnection("jdbc:mysql://localhost:3306/testdb","root","123456");
@@ -31,15 +26,18 @@ public class AddStudent extends HttpServlet {
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
-        String query = "INSERT INTO `student` (`Name`, `Sex`, `RollNum`, `Age`, `courseId`) VALUES ('"+req.getParameter("name")+"', '"+req.getParameter("gender")+"', '"+req.getParameter("rollNum")+"', '"+req.getParameter("age")+"', '0')";
+        String query = "Select * from student where RollNum="+req.getParameter("rollNum");
+        ArrayList<Student> listOfStudent= new ArrayList<>();
         try {
-            result=stmt.executeUpdate(query);
-
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()){
+                listOfStudent.add(new Student(Integer.parseInt( rs.getString(1)),rs.getString(2),Integer.parseInt(rs.getString(4)),Integer.parseInt(rs.getString(5)),rs.getString(3)));
+            }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        req.setAttribute("resultOfAdd",result);
-        RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
+        req.setAttribute("dataOfStudent",listOfStudent);
+        RequestDispatcher rd = req.getRequestDispatcher("searchUI.jsp");
         rd.forward(req,resp);
     }
 }

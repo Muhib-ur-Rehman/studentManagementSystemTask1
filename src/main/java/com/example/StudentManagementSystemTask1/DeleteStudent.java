@@ -6,14 +6,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 
-public class AddStudent extends HttpServlet {
+public class DeleteStudent extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         super.doGet(req, resp);
@@ -31,7 +30,7 @@ public class AddStudent extends HttpServlet {
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
-        String query = "INSERT INTO `student` (`Name`, `Sex`, `RollNum`, `Age`, `courseId`) VALUES ('"+req.getParameter("name")+"', '"+req.getParameter("gender")+"', '"+req.getParameter("rollNum")+"', '"+req.getParameter("age")+"', '0')";
+        String query = "DELETE FROM student WHERE (`StudentId` = "+req.getParameter("rollNum")+")";
         try {
             result=stmt.executeUpdate(query);
 
@@ -39,7 +38,7 @@ public class AddStudent extends HttpServlet {
             throwables.printStackTrace();
         }
         req.setAttribute("resultOfAdd",result);
-        RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
+        RequestDispatcher rd = req.getRequestDispatcher("deleteUI.jsp");
         rd.forward(req,resp);
     }
 }
