@@ -22,6 +22,24 @@
             <url-pattern>/addStudent</url-pattern>
         </servlet-mapping>
 
+        <servlet>
+            <servlet-name>search</servlet-name>
+            <servlet-class>com.example.StudentManagementSystemTask1.SearchStudent</servlet-class>
+        </servlet>
+        <servlet-mapping>
+            <servlet-name>search</servlet-name>
+            <url-pattern>/searchStudent</url-pattern>
+        </servlet-mapping>
+
+        <servlet>
+            <servlet-name>delete</servlet-name>
+            <servlet-class>com.example.StudentManagementSystemTask1.DeleteStudent</servlet-class>
+        </servlet>
+        <servlet-mapping>
+            <servlet-name>delete</servlet-name>
+            <url-pattern>/DeleteStudent</url-pattern>
+        </servlet-mapping>
+
     
         <welcome-file-list>
             <welcome-file>index.jsp</welcome-file>

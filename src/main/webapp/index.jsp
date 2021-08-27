@@ -47,11 +47,17 @@
                   </label>
                 </p>
 
-                <button type="submit" class="btn" style="margin-top: 20px">Add Student</button>
+                <button type="submit" class="btn" style="margin-top: 20px; width: 300px;">Add Student</button>
               </form>
               <form action="fetchStudent" method="post">
-                <button type="submit" class="btn" style="margin-top: 20px">View all student</button>
+                <button type="submit" class="btn" style="margin-top: 20px; width: 300px;">View all student</button>
               </form>
+              <a href="searchUI.jsp">
+                <button type="button" class="btn" style="margin-top: 20px; width: 300px;">Search</button>
+              </a>
+              <a href="deleteUI.jsp">
+                <button type="button" class="btn" style="margin-top: 20px; width: 300px;">Delete</button>
+              </a>
             </div>
           </div>
         </div>
