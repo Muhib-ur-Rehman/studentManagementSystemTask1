@@ -19,18 +19,18 @@ public class StudentFetch extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Connection con =null;
-        Statement stmt=null;
+        PreparedStatement stmt=null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con= DriverManager.getConnection("jdbc:mysql://localhost:3306/testdb","root","123456");
-            stmt=con.createStatement();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         String query = "Select * from student";
         ArrayList<Student> listOfStudent= new ArrayList<>();
         try {
-            ResultSet rs = stmt.executeQuery(query);
+            stmt=con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()){
                 listOfStudent.add(new Student(Integer.parseInt( rs.getString(1)),rs.getString(2),Integer.parseInt(rs.getString(4)),Integer.parseInt(rs.getString(5)),rs.getString(3)));
             }
