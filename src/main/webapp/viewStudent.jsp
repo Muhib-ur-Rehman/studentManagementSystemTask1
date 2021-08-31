@@ -1,5 +1,5 @@
-<%@ page import="com.example.StudentManagementSystemTask1.Student" %>
-<%@ page import="java.util.ArrayList" %><%--
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="com.example.StudentManagementSystemTask1.Student2" %><%--
   Created by IntelliJ IDEA.
   User: mrehman
   Date: 17/08/2021
@@ -28,15 +28,15 @@
                         <th><b>Age</b></th>
                     </tr>
                         <%
-                              ArrayList<Student> listOfStudent = (ArrayList<Student>) request.getAttribute("dataOfStudent");
+                              ArrayList<Student2> listOfStudent = (ArrayList<Student2>) request.getAttribute("dataOfStudent");
                               if (listOfStudent!=null){
-                              for (Student s : listOfStudent){ %>
+                              for (Student2 s : listOfStudent){ %>
                     <tr>
-                        <td><%=s.studentId %></td>
-                        <td><%=s.name %></td>
-                        <td><%=s.gender %></td>
-                        <td><%=s.rollNum %></td>
-                        <td><%=s.age %></td>
+                        <td><%=s.getStudentId() %></td>
+                        <td><%=s.getName()%></td>
+                        <td><%=s.getSex() %></td>
+                        <td><%=s.getRollNum() %></td>
+                        <td><%=s.getAge() %></td>
                     </tr>
                         <% }
           }

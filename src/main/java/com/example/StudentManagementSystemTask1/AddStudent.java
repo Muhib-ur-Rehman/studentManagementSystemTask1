@@ -1,5 +1,10 @@
 package com.example.StudentManagementSystemTask1;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,30 +23,27 @@ public class AddStudent extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Connection con =null;
-        PreparedStatement stmt=null;
-        int result=0;
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con= DriverManager.getConnection("jdbc:mysql://localhost:3306/testdb","root","123456");
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        SessionFactory factory = configuration.buildSessionFactory();
+        Student2 std = new Student2();
+        std.setName(req.getParameter("name"));
+        std.setAge(Integer.parseInt(req.getParameter("age")));
+        std.setRollNum(Integer.parseInt(req.getParameter("rollNum")));
+        std.setSex(req.getParameter("gender"));
+        String courseArr[] = req.getParameterValues("course");
+        ArrayList<Course> listOfCourse =new ArrayList<>();
+        for (int i = 0 ; i<courseArr.length;i++){
+            Course c = new Course();
+            c.setCourseId(Integer.parseInt(courseArr[i]));
+            listOfCourse.add(c);
         }
-        String query = "INSERT INTO `student` (`Name`, `Sex`, `RollNum`, `Age`, `courseId`) VALUES (?,?,?,?,?)";
-        try {
-            stmt = con.prepareStatement(query);
-            stmt.setString(1,req.getParameter("name"));
-            stmt.setString(2,req.getParameter("gender"));
-            stmt.setInt(3,Integer.parseInt(req.getParameter("rollNum")));
-            stmt.setInt(4,Integer.parseInt(req.getParameter("age")));
-            stmt.setInt(5,0);
-
-
-            result=stmt.executeUpdate();
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        std.setCourses(listOfCourse);
+        Session session = factory.openSession();
+        Transaction tx = session.beginTransaction();
+        int result= (int) session.save(std);
+        tx.commit();
+        session.close();
         req.setAttribute("resultOfAdd",result);
         RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
         rd.forward(req,resp);
