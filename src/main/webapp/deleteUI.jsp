@@ -21,7 +21,7 @@
                     <%
                         Object resultOfAdd =request.getAttribute("resultOfAdd");
                         if (resultOfAdd != null){
-                            if (resultOfAdd.toString().equals("1")){ %>
+                            if (!resultOfAdd.toString().equals("0")){ %>
                     <p style="background-color:lightgreen;">Record deleted successfully...</p>
                     <% }
                         if (resultOfAdd.toString().equals("0")) { %>

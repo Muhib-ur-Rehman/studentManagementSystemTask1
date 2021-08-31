@@ -1,5 +1,10 @@
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="com.example.StudentManagementSystemTask1.Student" %>
+<%@ page import="com.example.StudentManagementSystemTask1.Student2" %>
+<%@ page import="java.sql.DriverManager" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="org.hibernate.hql.internal.ast.tree.Statement" %>
+<%@ page import="java.sql.PreparedStatement" %>
+<%@ page import="java.sql.ResultSet" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -14,6 +19,13 @@
 
 </head>
 <body>
+    <%
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection con= DriverManager.getConnection("jdbc:mysql://localhost:3306/testdb","root","123456");
+        String query = "Select * from course";
+        PreparedStatement stmt = con.prepareStatement(query);
+        ResultSet result=stmt.executeQuery();
+    %>
 
   <div class="container">
     <div class="row ">
@@ -26,7 +38,7 @@
                 <%
                   Object resultOfAdd =request.getAttribute("resultOfAdd");
                   if (resultOfAdd != null){
-                  if (resultOfAdd.toString().equals("1")){ %>
+                  if (!resultOfAdd.toString().equals("0")){ %>
                     <p style="background-color:lightgreen;">Records added successfully...</p>
                 <% }
                   if (resultOfAdd.toString().equals("0")) { %>
@@ -36,6 +48,16 @@
                 <input type="text" placeholder="Enter Student Name" name="name">
                 <input type="text" placeholder="Enter Roll Number" name="rollNum">
                 <input type="text" placeholder="Enter Age" name="age">
+
+                  <div class="input-field col s12">
+                      <select name="course" multiple>
+                          <option value="" disabled selected>Choose your option</option>
+                          <% while (result.next()){ %>
+                          <option value="<%= result.getString(1) %>"><%= result.getString(3)%></option>
+                          <% } %>
+                      </select>
+                  </div>
+
                 <p> <span>Gender</span>  &nbsp;  &nbsp;
                   <label>
                     <input name="gender" type="radio" value="Male" checked />
@@ -46,12 +68,14 @@
                     <span>Girl</span>
                   </label>
                 </p>
-
-                <button type="submit" class="btn" style="margin-top: 20px; width: 300px;">Add Student</button>
+              <button type="submit" class="btn" style="margin-top: 20px; width: 300px;">Add Student</button>
               </form>
               <form action="fetchStudent" method="post">
                 <button type="submit" class="btn" style="margin-top: 20px; width: 300px;">View all student</button>
               </form>
+              <a href="updateUI.jsp">
+                <button type="button" class="btn" style="margin-top: 20px; width: 300px;">Update</button>
+              </a>
               <a href="searchUI.jsp">
                 <button type="button" class="btn" style="margin-top: 20px; width: 300px;">Search</button>
               </a>
@@ -69,5 +93,14 @@
 
   </div>
 
+
+
+
 </body>
 </html>
+
+<style>
+    select {
+        display: block;
+    }
+</style>
